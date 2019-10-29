@@ -1,0 +1,10 @@
+---
+title: "Hao Sun's personal website"
+output: 
+  html_document
+
+---
+## This is the personal website of Hao Sun.This site contains the resume,work example, and contact information of Hao Sun.
+
+
+![](./image/Selfie.jpeg)
