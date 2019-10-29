@@ -1,10 +1,16 @@
 ---
 title: "Hao Sun's personal website"
 output: 
-  html_document
-
+  html_document:
+    toc: true
+    toc_float: true
+    theme: journal
 ---
-## This is the personal website of Hao Sun.This site contains the resume,work example, and contact information of Hao Sun.
-
+## Introduction
+__Currently studying  biostatstics in CUMC Columbia.__
+After graduated from UIUC with research distinction, Hao Sun held the position of Presale Manager and Industrial Consultant in Beijing Bio-LIMS Soft. co, LTD. Hao Sun is adapted with helping clinical lab in using LIMS to implement CAP standards QMS. Afterward, he established a branch of Bio-LIMS Soft. co, LTD. in Zhuhai. 
 
 ![](./image/Selfie.jpeg)
+
+## Direction
+__This is the personal website of Hao Sun.This site contains the resume,work example, and contact information of him. CV and contact info can be found in the About pages. A collection of plot created from instacar package can be found in the P8105_demo pages. Other project created by Hao Sun can be access via the github icon. Please send Email directly to Hao Sun via the email icon on the top of the webpage.__
