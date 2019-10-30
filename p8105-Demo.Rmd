@@ -5,6 +5,7 @@ output:
     code_folding: hide
     toc: true
     toc_float: true
+    theme: journal
 ---
 ```{r include = FALSE}
 library(tidyverse)
@@ -49,10 +50,12 @@ most_reordered<-instacart_fresh_vegetabe %>% filter(reordered ==1 ) %>%
   mutate(`product name`=as.factor(as.character(product_name)),
          `product name` = reorder(`product name`,desc(n)),
                                      `times of reordered` = n)
-
   most_reordered%>%plot_ly(x = ~`product name`, y = ~`times of reordered`, type = "bar")
 
 
 
 ```
+
+The following graph show the 10 most reordered items from the fresh item aisle.
+
 

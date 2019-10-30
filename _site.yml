@@ -6,7 +6,7 @@ navbar:
     - text: "About"
       href: About.html
     - text: "P8105-Demo"
-      href: P8105_demo.html
+      href: p8105_demo.html
     - icon: fa-envelope fa-lg
       href: mailto:<hs3163@cumc.columbia.com>
     - icon: fa-github fa-lg
