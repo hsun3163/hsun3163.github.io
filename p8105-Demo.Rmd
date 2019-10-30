@@ -1,0 +1,58 @@
+---
+title: "P8105-Demo"
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+```{r include = FALSE}
+library(tidyverse)
+library(viridis)
+library(p8105.datasets)
+library(plotly)
+```
+
+The data used in this page is from “The Instacart Online Grocery Shopping Dataset 2017”, 3 million online grocery orders from more than 200,000 users of Instacart, an online grocery service that allows you to shop online from local stores. The data used is tidied and focus on the products from the most popular asile: Fresh Vegetable.
+```{r}
+data("instacart")
+DOW_Name = c( "Saturday","Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+
+###Tidy up the table
+instacart_tidy<-instacart%>%
+  ###Factorized the aisle, department, and change order_dow into human readable factor
+  mutate(
+    aisle = forcats::fct_reorder(factor(aisle),aisle_id),
+    department = forcats::fct_reorder(factor(department),department_id),
+    product_name = forcats::fct_reorder(factor(product_name),product_id),
+    ##According to the github hosting the data, 0 = Saturday
+    order_dow = order_dow+1,
+    order_dow = forcats::fct_reorder(factor(DOW_Name[order_dow]),order_dow)
+  )
+
+instacart_fresh_vegetabe<-instacart_tidy%>%filter(aisle == "fresh vegetables")
+```
+The following graph show the number of items ordered from the aisle across hours of the day for each day of the week.
+
+```{r}
+instacart_fresh_vegetabe %>% group_by(order_dow)%>%
+  count(order_hour_of_day)%>%  
+  mutate(`item orderd` = n, `hour of day` = order_hour_of_day)%>%
+  plot_ly(x = ~`hour of day`, y = ~`item orderd`, type = "scatter", mode = "markers",
+          color = ~order_dow, alpha = 0.5)
+```
+The following graph show the 10 most reordered items from the fresh item aisle.
+
+```{r}
+most_reordered<-instacart_fresh_vegetabe %>% filter(reordered ==1 ) %>% 
+  count(product_name)%>%arrange(desc(n))%>%head(10)%>%
+  mutate(`product name`=as.factor(as.character(product_name)),
+         `product name` = reorder(`product name`,desc(n)),
+                                     `times of reordered` = n)
+
+  most_reordered%>%plot_ly(x = ~`product name`, y = ~`times of reordered`, type = "bar")
+
+
+
+```
+
