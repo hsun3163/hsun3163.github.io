@@ -38,7 +38,7 @@ instacart_fresh_vegetabe<-instacart_tidy%>%filter(aisle == "fresh vegetables")
 Column {data-width=650}
 -----------------------------------------------------------------------
 The data used in this page is from “The Instacart Online Grocery Shopping Dataset 2017”, 3 million online grocery orders from more than 200,000 users of Instacart, an online grocery service that allows you to shop online from local stores. The data used is tidied and focus on the products from the most popular asile: Fresh Vegetable.
-##The number of items ordered from the aisle across hours of the day for each day of the week.
+## The number of items ordered from the aisle across hours of the day for each day of the week.
 ```{r}
 instacart_fresh_vegetabe %>% group_by(order_dow)%>%
   count(order_hour_of_day)%>%  
@@ -53,7 +53,7 @@ instacart_fresh_vegetabe %>% group_by(order_dow)%>%
 
 Column {data-width=350}
 -----------------------------------------------------------------------
-##The 10 most reordered items from the fresh item aisle.
+## The 10 most reordered items from the fresh item aisle.
 
 ```{r}
 most_reordered<-instacart_fresh_vegetabe %>% filter(reordered ==1 ) %>% 
@@ -70,19 +70,17 @@ most_reordered<-instacart_fresh_vegetabe %>% filter(reordered ==1 ) %>%
 
 ```
 
-The following graph 
-
+## The distribution of days since prior order for the 20 most reordered items from the fresh item aisle
 ```{r}
-most_reordered<-instacart_fresh_vegetabe %>% filter(reordered ==1 ) %>% 
-  count(product_name)%>%arrange(desc(n))%>%head(20)%>%
-  mutate(`product name`=as.factor(as.character(product_name)),
-         `product name` = reorder(`product name`,desc(n)),
-                                     `times of reordered` = n)
-  most_reordered%>%plot_ly(x = ~`product name`, y = ~`times of reordered`, type = "bar")%>%
+
+ten_most_popular<-most_reordered%>%pull(`product name`)
+
+instacart_fresh_vegetabe %>% filter(product_name %in% as.character(ten_most_popular)[1:20] )%>%
+  mutate(`product name`= factor( product_name ,levels = levels(ten_most_popular)))%>%
+                                     
+plot_ly(x = ~`product name`, y = ~`days_since_prior_order`, type = "violin")%>%
       layout(xaxis = list(title = 'Product name'),
-         yaxis = list(title = 'Number of of reordering'),
+         yaxis = list(title = 'Days Since Prior Order'),
          legend = list(x = 0.80, y = 0.90))
-
-
 
 ```
