@@ -1,0 +1,87 @@
+---
+title: "P8105-Demo"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+
+```{r include = FALSE}
+library(tidyverse)
+library(viridis)
+library(p8105.datasets)
+library(plotly)
+```
+
+
+```{r}
+data("instacart")
+DOW_Name = c( "Saturday","Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+
+###Tidy up the table
+instacart_tidy<-instacart%>%
+  ###Factorized the aisle, department, and change order_dow into human readable factor
+  mutate(
+    aisle = forcats::fct_reorder(factor(aisle),aisle_id),
+    department = forcats::fct_reorder(factor(department),department_id),
+    product_name = forcats::fct_reorder(factor(product_name),product_id),
+    ##According to the github hosting the data, 0 = Saturday
+    order_dow = order_dow+1,
+    order_dow = forcats::fct_reorder(factor(DOW_Name[order_dow]),order_dow)
+  )
+
+instacart_fresh_vegetabe<-instacart_tidy%>%filter(aisle == "fresh vegetables")
+```
+
+The data used in this page is from “The Instacart Online Grocery Shopping Dataset 2017”, 3 million online grocery orders from more than 200,000 users of Instacart, an online grocery service that allows you to shop online from local stores. The data used is tidied and focus on the products from the most popular asile: Fresh Vegetable.
+
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+## The number of items ordered from the aisle across hours of the day for each day of the week.
+```{r}
+instacart_fresh_vegetabe %>% group_by(order_dow)%>%
+  count(order_hour_of_day)%>%  
+  mutate(`item orderd` = n, `hour of day` = order_hour_of_day)%>%
+  plot_ly(x = ~`hour of day`, y = ~`item orderd`, type = "scatter", mode = "markers",
+          color = ~order_dow, alpha = 1)%>%
+  layout(xaxis = list(title = 'Hour of day'),
+         yaxis = list(title = 'Item orderd'),
+         legend = list(x = 0.80, y = 0.90))
+```
+
+
+
+## The 10 most reordered items from the fresh item aisle.
+
+```{r}
+most_reordered<-instacart_fresh_vegetabe %>% filter(reordered ==1 ) %>% 
+  count(product_name)%>%arrange(desc(n))%>%head(10)%>%
+  mutate(`product name`=as.factor(as.character(product_name)),
+         `product name` = reorder(`product name`,desc(n)),
+                                     `times of reordered` = n)
+  most_reordered%>%plot_ly(y = ~`product name`, x = ~`times of reordered`, type = "bar")%>%
+      layout(yaxis = list(title = ''),
+         xaxis = list(title = 'Number of of reordering'),
+         legend = list(x = 1, y = 1))
+
+
+
+```
+
+## The distribution of days since prior order for the 10 most reordered items from the fresh item aisle
+```{r}
+
+
+ten_most_popular<-most_reordered%>%pull(`product name`)
+
+instacart_fresh_vegetabe %>% filter(product_name %in% as.character(ten_most_popular)[1:10] )%>%
+  mutate(`product name`= factor( product_name ,levels = levels(ten_most_popular)))%>%
+                                     
+plot_ly(x = ~`product name`, y = ~`days_since_prior_order`, type = "violin")%>%
+      layout(xaxis = list(title = ' '),
+         yaxis = list(title = 'Days Since Prior Order'),
+         legend = list(x = 0.80, y = 0.90))
+
+```
