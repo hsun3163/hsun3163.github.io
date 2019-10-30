@@ -35,7 +35,7 @@ instacart_fresh_vegetabe<-instacart_tidy%>%filter(aisle == "fresh vegetables")
 ```
 
 
-Column {data-width=650}
+Column {data-width=350}
 -----------------------------------------------------------------------
 The data used in this page is from “The Instacart Online Grocery Shopping Dataset 2017”, 3 million online grocery orders from more than 200,000 users of Instacart, an online grocery service that allows you to shop online from local stores. The data used is tidied and focus on the products from the most popular asile: Fresh Vegetable.
 ## The number of items ordered from the aisle across hours of the day for each day of the week.
@@ -51,7 +51,7 @@ instacart_fresh_vegetabe %>% group_by(order_dow)%>%
 ```
 
 
-Column {data-width=350}
+Column {data-width=650}
 -----------------------------------------------------------------------
 ## The 10 most reordered items from the fresh item aisle.
 
