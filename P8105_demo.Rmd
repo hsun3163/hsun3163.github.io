@@ -39,7 +39,8 @@ The data used in this page is from “The Instacart Online Grocery Shopping Data
 
 Column {data-width=350}
 -----------------------------------------------------------------------
-## The number of items ordered from the aisle across hours of the day for each day of the week.
+### The number of items ordered from the aisle across hours of the day for each day of the week.
+
 ```{r}
 instacart_fresh_vegetabe %>% group_by(order_dow)%>%
   count(order_hour_of_day)%>%  
@@ -52,8 +53,9 @@ instacart_fresh_vegetabe %>% group_by(order_dow)%>%
 ```
 
 
-
-## The 10 most reordered items from the fresh item aisle.
+Column {data-width=650}
+-----------------------------------------------------------------------
+### The 10 most reordered items from the fresh item aisle.
 
 ```{r}
 most_reordered<-instacart_fresh_vegetabe %>% filter(reordered ==1 ) %>% 
@@ -61,16 +63,16 @@ most_reordered<-instacart_fresh_vegetabe %>% filter(reordered ==1 ) %>%
   mutate(`product name`=as.factor(as.character(product_name)),
          `product name` = reorder(`product name`,desc(n)),
                                      `times of reordered` = n)
-  most_reordered%>%plot_ly(y = ~`product name`, x = ~`times of reordered`, type = "bar")%>%
-      layout(yaxis = list(title = ''),
-         xaxis = list(title = 'Number of of reordering'),
+  most_reordered%>%plot_ly(x = ~`product name`, y = ~`times of reordered`, type = "bar")%>%
+      layout(xaxis = list(title = ''),
+         yaxis = list(title = 'Number of of reordering'),
          legend = list(x = 1, y = 1))
 
 
 
 ```
 
-## The distribution of days since prior order for the 10 most reordered items from the fresh item aisle
+### The distribution of days since prior order for the 10 most reordered items from the fresh item aisle
 ```{r}
 
 
